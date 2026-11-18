@@ -1,0 +1,109 @@
+<Page
+    x:Class="Nexus.UI.Views.ProfilesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Nexus.UI.ViewModels"
+    NavigationCacheMode="Required"
+    Background="Transparent">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="22,14,22,22" Spacing="14">
+
+            <StackPanel Spacing="2">
+                <TextBlock Text="Profil Optimasi Sistem" Style="{StaticResource NexusPageTitleStyle}" />
+                <TextBlock Text="{x:Bind ViewModel.ActiveProfileBanner, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" />
+            </StackPanel>
+
+            <!-- 4 Kartu Profil -->
+            <ItemsRepeater ItemsSource="{x:Bind ViewModel.Profiles}">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout MinItemWidth="300" MinItemHeight="195" MinColumnSpacing="12" MinRowSpacing="12" />
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ProfileCardModel">
+                        <Border Style="{StaticResource NexusCardBorderStyle}" Padding="16">
+                            <Grid RowSpacing="8">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0" ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{x:Bind DisplayName}" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind PowerBadge}" Style="{StaticResource NexusMutedCaptionStyle}" VerticalAlignment="Center" />
+                                </Grid>
+
+                                <TextBlock Grid.Row="1" Text="{x:Bind DescriptionId}" Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                                <TextBlock Grid.Row="2" Text="{x:Bind GuardrailBadge}" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource NexusAccentBrush}" TextWrapping="Wrap" />
+
+                                <Button
+                                    Grid.Row="3"
+                                    Content="Aktifkan Profil Ini"
+                                    HorizontalAlignment="Stretch"
+                                    Tag="{x:Bind Raw.Type}"
+                                    Click="ActivateProfile_Click" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+
+            <!-- Editor Profil Aktif -->
+            <Border Style="{StaticResource NexusCardBorderStyle}" MaxWidth="920" HorizontalAlignment="Stretch" Padding="20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Sesuaikan Parameter Profil Aktif (Tersimpan di SQLite)" Style="{StaticResource NexusCardTitleStyle}" />
+
+                    <StackPanel Spacing="4">
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Batas Target RAM (%)" Style="{StaticResource NexusCaptionStyle}" />
+                            <TextBlock Grid.Column="1" FontWeight="SemiBold" Foreground="{ThemeResource NexusAccentBrush}">
+                                <Run Text="{x:Bind ViewModel.EditRamThreshold, Mode=OneWay}" /><Run Text="%" />
+                            </TextBlock>
+                        </Grid>
+                        <Slider Minimum="50" Maximum="95" StepFrequency="1" Value="{x:Bind ViewModel.EditRamThreshold, Mode=TwoWay}" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="4">
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Batas Target CPU (%)" Style="{StaticResource NexusCaptionStyle}" />
+                            <TextBlock Grid.Column="1" FontWeight="SemiBold" Foreground="{ThemeResource NexusAccentBrush}">
+                                <Run Text="{x:Bind ViewModel.EditCpuThreshold, Mode=OneWay}" /><Run Text="%" />
+                            </TextBlock>
+                        </Grid>
+                        <Slider Minimum="35" Maximum="95" StepFrequency="1" Value="{x:Bind ViewModel.EditCpuThreshold, Mode=TwoWay}" />
+                    </StackPanel>
+
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <NumberBox Header="Batas Waktu Idle Aplikasi (Menit)" Minimum="5" Maximum="180" Value="{x:Bind ViewModel.EditIdleMinutes, Mode=TwoWay}" />
+                        <ToggleSwitch Grid.Column="1" Header="Mode Efisiensi (EcoQoS)" IsOn="{x:Bind ViewModel.EditEnableEcoQoS, Mode=TwoWay}" OnContent="Aktif" OffContent="Nonaktif" />
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Content="Simpan Perubahan Profil" Command="{x:Bind ViewModel.SaveActiveProfileEditsCommand}" />
+                        <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Foreground="{ThemeResource NexusSuccessBrush}" VerticalAlignment="Center" FontSize="12" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>
+

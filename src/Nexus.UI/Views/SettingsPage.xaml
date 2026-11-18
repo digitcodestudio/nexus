@@ -1,0 +1,166 @@
+<Page
+    x:Class="Nexus.UI.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    NavigationCacheMode="Required"
+    Background="Transparent">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="24,16,24,28" Spacing="16" MaxWidth="980" HorizontalAlignment="Stretch">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="Pengaturan NEXUS" Style="{StaticResource NexusPageTitleStyle}" />
+                <TextBlock Text="Atur tampilan Fluent, perilaku System Tray, startup Windows, interval pemantauan, serta batas target RAM &amp; CPU." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <!-- Tampilan & Perilaku Latar Belakang -->
+            <Border Style="{StaticResource NexusCardBorderStyle}" Padding="20">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="Tampilan &amp; Berjalan di Latar Belakang" Style="{StaticResource NexusCardTitleStyle}" />
+
+                    <!-- Baris 1: Tema -->
+                    <Grid ColumnSpacing="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="Tema Gelap (Default)" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Text="Beralih antara Tema Gelap Fluent Charcoal dan Tema Terang sesuai kenyamanan mata Anda." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch
+                            Grid.Column="1"
+                            MinWidth="115"
+                            VerticalAlignment="Center"
+                            IsOn="{x:Bind ViewModel.IsDarkTheme, Mode=TwoWay}"
+                            OnContent="Gelap"
+                            OffContent="Terang" />
+                    </Grid>
+
+                    <Border Height="1" Background="{ThemeResource NexusDividerBrush}" />
+
+                    <!-- Baris 2: System Tray -->
+                    <Grid ColumnSpacing="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="Tetap Berjalan di System Tray saat Jendela Ditutup (X)" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Text="Menjaga pemantauan dan optimasi tetap aktif di latar belakang. Klik kanan ikon tray untuk keluar sepenuhnya." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch
+                            Grid.Column="1"
+                            MinWidth="115"
+                            VerticalAlignment="Center"
+                            IsOn="{x:Bind ViewModel.MinimizeToTrayOnClose, Mode=TwoWay}"
+                            OnContent="Aktif"
+                            OffContent="Nonaktif" />
+                    </Grid>
+
+                    <Border Height="1" Background="{ThemeResource NexusDividerBrush}" />
+
+                    <!-- Baris 3: Startup Windows -->
+                    <Grid ColumnSpacing="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="Jalankan Otomatis saat Windows Menyala (Startup)" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Text="Memulai NEXUS secara otomatis di latar belakang (System Tray) setiap kali Anda login ke Windows." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch
+                            Grid.Column="1"
+                            MinWidth="115"
+                            VerticalAlignment="Center"
+                            IsOn="{x:Bind ViewModel.StartWithWindows, Mode=TwoWay}"
+                            OnContent="Aktif"
+                            OffContent="Nonaktif" />
+                    </Grid>
+
+                    <TextBlock Style="{StaticResource NexusMutedCaptionStyle}" Margin="0,4,0,0">
+                        <Run Text="Material Jendela Aktif: " />
+                        <Run Text="{x:Bind ViewModel.BackdropInfo, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <!-- Batas Target Guardrail -->
+            <Border Style="{StaticResource NexusCardBorderStyle}" Padding="20">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="Batas Target Sumber Daya (Guardrail)" Style="{StaticResource NexusCardTitleStyle}" />
+
+                    <StackPanel Spacing="6">
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Batas Maksimal Penggunaan RAM (%)" FontSize="13" FontWeight="Medium" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Grid.Column="1" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusAccentBrush}" Typography.NumeralAlignment="Tabular">
+                                <Run Text="{x:Bind ViewModel.RamGuardrailPercent, Mode=OneWay}" /><Run Text="%" />
+                            </TextBlock>
+                        </Grid>
+                        <Slider Minimum="50" Maximum="95" StepFrequency="1" Value="{x:Bind ViewModel.RamGuardrailPercent, Mode=TwoWay}" />
+                        <TextBlock Text="Default: 75%. Memicu analisis tekanan RAM dan rekomendasi aplikasi latar belakang idle saat terlampaui." Style="{StaticResource NexusMutedCaptionStyle}" TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <Border Height="1" Background="{ThemeResource NexusDividerBrush}" />
+
+                    <StackPanel Spacing="6">
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Batas Maksimal Beban CPU Berkelanjutan (%)" FontSize="13" FontWeight="Medium" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Grid.Column="1" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusAccentBrush}" Typography.NumeralAlignment="Tabular">
+                                <Run Text="{x:Bind ViewModel.CpuGuardrailPercent, Mode=OneWay}" /><Run Text="%" />
+                            </TextBlock>
+                        </Grid>
+                        <Slider Minimum="35" Maximum="95" StepFrequency="1" Value="{x:Bind ViewModel.CpuGuardrailPercent, Mode=TwoWay}" />
+                        <TextBlock Text="Default: 65%. Dihitung pada rata-rata berkelanjutan agar lonjakan singkat kerja aktif tidak terganggu." Style="{StaticResource NexusMutedCaptionStyle}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Interval Pemantauan -->
+            <Border Style="{StaticResource NexusCardBorderStyle}" Padding="20">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Interval Pemantauan Real-Time" Style="{StaticResource NexusCardTitleStyle}" />
+                    <Grid ColumnSpacing="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="Kecepatan Pengambilan Sampel" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Text="1000 ms (1 detik) direkomendasikan agar beban CPU &amp; RAM aplikasi NEXUS tetap sangat ringan." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ComboBox
+                            Grid.Column="1"
+                            Width="185"
+                            VerticalAlignment="Center"
+                            SelectedIndex="{x:Bind ViewModel.SelectedSamplingIndex, Mode=TwoWay}">
+                            <ComboBoxItem Content="500 ms (Cepat)" />
+                            <ComboBoxItem Content="1000 ms (Default)" />
+                            <ComboBoxItem Content="2000 ms (Ringan)" />
+                            <ComboBoxItem Content="5000 ms (Hemat)" />
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Diagnostik Database -->
+            <Border Style="{StaticResource NexusCardBorderStyle}" Padding="20">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Database Konfigurasi &amp; Cadangan SQLite" Style="{StaticResource NexusCardTitleStyle}" />
+                    <TextBlock Text="{x:Bind ViewModel.DatabasePathInfo, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Foreground="{ThemeResource NexusSuccessBrush}" FontSize="12" Margin="0,4,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

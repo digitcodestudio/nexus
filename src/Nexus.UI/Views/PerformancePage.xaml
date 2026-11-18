@@ -1,0 +1,156 @@
+<Page
+    x:Class="Nexus.UI.Views.PerformancePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Nexus.UI.ViewModels"
+    NavigationCacheMode="Required"
+    Background="Transparent">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="22,14,22,22" Spacing="14">
+
+            <StackPanel Spacing="2">
+                <TextBlock Text="Monitor Performa Mendalam" Style="{StaticResource NexusPageTitleStyle}" />
+                <TextBlock Text="{x:Bind ViewModel.OsHardwareText, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" />
+            </StackPanel>
+
+            <!-- Rincian CPU & Per-Core -->
+            <Border Style="{StaticResource NexusCardBorderStyle}">
+                <StackPanel Spacing="12">
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="Prosesor (CPU)" Style="{StaticResource NexusCardTitleStyle}" />
+                            <TextBlock Text="{x:Bind ViewModel.CpuModelText, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="18" VerticalAlignment="Center">
+                            <StackPanel>
+                                <TextBlock Text="Beban Total" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                <TextBlock Text="{x:Bind ViewModel.CpuLoadSummary, Mode=OneWay}" Style="{StaticResource NexusKpiValueStyle}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Frekuensi" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                <TextBlock Text="{x:Bind ViewModel.CpuFreqText, Mode=OneWay}" Style="{StaticResource NexusKpiValueStyle}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Status Beban" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                <TextBlock Text="{x:Bind ViewModel.CpuSustainedStatus, Mode=OneWay}" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusAccentBrush}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.CoreLoads}">
+                        <ItemsRepeater.Layout>
+                            <UniformGridLayout MinItemWidth="150" MinItemHeight="44" MinColumnSpacing="10" MinRowSpacing="8" />
+                        </ItemsRepeater.Layout>
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="vm:CoreLoadItem">
+                                <Border Background="{ThemeResource NexusCardElevatedBrush}" CornerRadius="6" Padding="10,6">
+                                    <StackPanel Spacing="4">
+                                        <Grid ColumnSpacing="6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{x:Bind CoreLabel}" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                            <TextBlock Grid.Column="1" Text="{x:Bind PercentText}" Style="{StaticResource NexusCaptionStyle}" />
+                                        </Grid>
+                                        <ProgressBar Value="{x:Bind Percent}" Maximum="100" Height="4" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+                </StackPanel>
+            </Border>
+
+            <!-- Rincian Memori, Disk & Jaringan -->
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource NexusCardBorderStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Komposisi Memori (RAM)" Style="{StaticResource NexusCardTitleStyle}" />
+                        <ProgressBar Value="{x:Bind ViewModel.RamUsagePercent, Mode=OneWay}" Maximum="100" Height="8" />
+                        <Grid RowSpacing="6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="RAM Fisik Terpakai" Style="{StaticResource NexusCaptionStyle}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind ViewModel.RamUsedText, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="RAM Tersedia" Style="{StaticResource NexusCaptionStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind ViewModel.RamAvailableText, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" Foreground="{ThemeResource NexusSuccessBrush}" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Cache Sistem (Standby)" Style="{StaticResource NexusCaptionStyle}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ViewModel.RamCachedText, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Memori Komit / Batas" Style="{StaticResource NexusCaptionStyle}" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind ViewModel.RamCommittedText, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" />
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Tingkat Tekanan Memori" Style="{StaticResource NexusCaptionStyle}" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind ViewModel.RamPressureText, Mode=OneWay}" FontSize="12" FontWeight="SemiBold" Foreground="{ThemeResource NexusAccentBrush}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Grid.Column="1" Spacing="12">
+                    <Border Style="{StaticResource NexusCardBorderStyle}">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Penyimpanan (Disk I/O)" Style="{StaticResource NexusCardTitleStyle}" />
+                            <TextBlock Text="{x:Bind ViewModel.DiskCapacityText, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" />
+                            <StackPanel Orientation="Horizontal" Spacing="18" Margin="0,4,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Aktif" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                    <TextBlock Text="{x:Bind ViewModel.DiskActiveText, Mode=OneWay}" Style="{StaticResource NexusKpiValueStyle}" FontSize="16" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Kecepatan Baca" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                    <TextBlock Text="{x:Bind ViewModel.DiskReadText, Mode=OneWay}" Style="{StaticResource NexusKpiValueStyle}" FontSize="16" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Kecepatan Tulis" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                    <TextBlock Text="{x:Bind ViewModel.DiskWriteText, Mode=OneWay}" Style="{StaticResource NexusKpiValueStyle}" FontSize="16" />
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource NexusCardBorderStyle}">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Jaringan (Network Throughput)" Style="{StaticResource NexusCardTitleStyle}" />
+                            <TextBlock Text="{x:Bind ViewModel.NetAdapterText, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" />
+                            <StackPanel Orientation="Horizontal" Spacing="24" Margin="0,4,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Unduh (Download)" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                    <TextBlock Text="{x:Bind ViewModel.NetDownText, Mode=OneWay}" Style="{StaticResource NexusKpiValueStyle}" FontSize="16" Foreground="{ThemeResource NexusAccentBrush}" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Unggah (Upload)" Style="{StaticResource NexusMutedCaptionStyle}" />
+                                    <TextBlock Text="{x:Bind ViewModel.NetUpText, Mode=OneWay}" Style="{StaticResource NexusKpiValueStyle}" FontSize="16" Foreground="{ThemeResource NexusSuccessBrush}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>
+

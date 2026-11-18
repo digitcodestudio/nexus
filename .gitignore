@@ -1,0 +1,44 @@
+# === Internal Multi-Agent & Design Docs (Excluded per repository policy) ===
+docs/
+agents/
+AGENTS.md
+DEVELOPMENT_ROADMAP.md
+TASK_TRACKER.md
+
+# === Build & Release Outputs ===
+[Bb]in/
+[Oo]bj/
+release/
+artifacts/
+publish/
+*.msix
+*.appx
+*.appxbundle
+
+# === Visual Studio & IDE ===
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# === Test & Coverage ===
+TestResults/
+coverage*/
+*.trx
+*.coverage
+
+# === Runtime Databases & Logs ===
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# === OS Files ===
+Thumbs.db
+Desktop.ini
+.DS_Store
+

@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Deterministic>true</Deterministic>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <Company>NEXUS System Optimizer</Company>
+    <Product>NEXUS System Optimizer</Product>
+    <Version>0.1.0</Version>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net10.0-windows10.0.26100.0'">10.0.19041.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="'$(TargetFramework)' == 'net10.0-windows10.0.26100.0'">10.0.19041.0</TargetPlatformMinVersion>
+  </PropertyGroup>
+</Project>
+

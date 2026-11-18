@@ -1,0 +1,119 @@
+<Page
+    x:Class="Nexus.UI.Views.SmartAutomationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:Nexus.Models"
+    NavigationCacheMode="Required"
+    Background="Transparent">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="22,14,22,22" Spacing="14">
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Spacing="2">
+                    <TextBlock Text="Mesin Otomatisasi Pintar (Smart Automation)" Style="{StaticResource NexusPageTitleStyle}" />
+                    <TextBlock Text="{x:Bind ViewModel.ActiveRuleSummary, Mode=OneWay}" Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Button Content="Evaluasi Sekarang" Command="{x:Bind ViewModel.EvaluateNowCommand}" />
+                    <Button Content="Lanjutkan" Command="{x:Bind ViewModel.ResumeCommand}" />
+                    <Button
+                        Content="STOP DARURAT"
+                        Background="{ThemeResource NexusCriticalBrush}"
+                        Foreground="White"
+                        Command="{x:Bind ViewModel.EmergencyStopCommand}" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Kontrol Mode Aman, Pembersih Tray & Auto-Stop Layanan Non-Kritis -->
+            <Border Style="{StaticResource NexusCardBorderStyle}" Padding="18">
+                <StackPanel Spacing="14">
+                    <Grid ColumnSpacing="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="Mode Aman (Hanya Rekomendasi / Dry-Run)" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Text="Jika aktif, NEXUS hanya mencatat rekomendasi tanpa menjalankan EcoQoS, pembersihan duplikat tray, atau penghentian layanan otomatis." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" MinWidth="150" VerticalAlignment="Center" IsOn="{x:Bind ViewModel.IsSafeMode, Mode=TwoWay}" OnContent="Mode Aman" OffContent="Otomatisasi Aktif" />
+                    </Grid>
+
+                    <Border Height="1" Background="{ThemeResource NexusDividerBrush}" />
+
+                    <!-- Pembersih System Tray & Duplikat Telegram -->
+                    <Grid ColumnSpacing="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="Auto-Bersihkan Ikon Tray Hantu &amp; Duplikat (mis. Telegram Ganda)" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Text="Menyapu ikon tray mati/hantu di taskbar secara otomatis dan menutup instansi duplikat idle aplikasi chat/tray dengan tetap mempertahankan 1 jendela aktif." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <Button Content="Bersihkan Sekarang" Command="{x:Bind ViewModel.CleanTrayNowCommand}" />
+                            <ToggleSwitch MinWidth="95" IsOn="{x:Bind ViewModel.EnableAutoTrayCleanup, Mode=TwoWay}" OnContent="Aktif" OffContent="Nonaktif" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Height="1" Background="{ThemeResource NexusDividerBrush}" />
+
+                    <!-- Auto-Stop Layanan Non-Kritis Tidak Terpakai (Opt-In) -->
+                    <Grid ColumnSpacing="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="Auto-Hentikan Layanan Windows Non-Kritis Tidak Terpakai (Opt-In)" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" />
+                            <TextBlock Text="Menghentikan layanan kandidat non-kritis (seperti Chrome/Edge updater, Telemetry, MapsBroker, Xbox helper, Fax) dengan cadangan Rollback SQLite otomatis. Layanan inti Windows tetap terkunci permanen." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                            <Button Content="Hentikan Sekarang" Command="{x:Bind ViewModel.StopUnusedServicesNowCommand}" />
+                            <ToggleSwitch MinWidth="95" IsOn="{x:Bind ViewModel.EnableAutoStopUnusedServices, Mode=TwoWay}" OnContent="Aktif" OffContent="Nonaktif" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Background="{ThemeResource NexusCardElevatedBrush}" CornerRadius="6" Padding="12">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Pipeline Aturan Bawaan (KETIKA → PERIKSA → AKSI)" FontSize="12" FontWeight="SemiBold" Foreground="{ThemeResource NexusAccentBrush}" />
+                            <TextBlock Text="• KETIKA RAM &gt; 75% ATAU CPU berkelanjutan &gt; 65% ATAU aplikasi tidak aktif ≥ 30 menit" Style="{StaticResource NexusCaptionStyle}" />
+                            <TextBlock Text="• PERIKSA: Bukan aplikasi fokus utama, bukan whitelist developer/sistem, CPU &lt; 1.5%, tidak ada Disk I/O tinggi, tidak ada build/database/child process aktif" Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                            <TextBlock Text="• AKSI: Terapkan Mode Efisiensi Windows (EcoQoS) reversibel, sapu tray duplikat, atau hentikan layanan kandidat opt-in dengan cadangan Rollback. Tidak pernah mematikan layanan kritis Windows." Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Foreground="{ThemeResource NexusSuccessBrush}" FontSize="12" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <!-- Hasil Evaluasi Rekomendasi -->
+            <Border Style="{StaticResource NexusCardBorderStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Rekomendasi &amp; Deteksi Aturan Saat Ini" Style="{StaticResource NexusCardTitleStyle}" />
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.Recommendations}">
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="models:OptimizationRecommendation">
+                                <Border Background="{ThemeResource NexusCardElevatedBrush}" CornerRadius="6" Padding="12" Margin="0,0,0,8">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{x:Bind Title}" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource NexusTextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Text="{x:Bind Description}" Style="{StaticResource NexusCaptionStyle}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>
