@@ -1,6 +1,7 @@
-# === Internal Multi-Agent & Design Docs (Excluded per repository policy) ===
+# === Internal Multi-Agent, Design Docs & Local Installer Scripts ===
 docs/
 agents/
+installer/
 AGENTS.md
 DEVELOPMENT_ROADMAP.md
 TASK_TRACKER.md

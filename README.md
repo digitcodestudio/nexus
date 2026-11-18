@@ -57,7 +57,6 @@ Tidak perlu kompilasi manual untuk langsung menggunakan NEXUS:
 - Windows 10 (19045+) atau Windows 11 (x64)
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - Windows 11 SDK (`10.0.26100.0`)
-- *(Opsional untuk membuat Setup `.exe` lokal)* [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`)
 
 ### Build & Jalankan Tests
 ```powershell
@@ -71,17 +70,12 @@ dotnet build Nexus.sln -p:Platform=x64
 # Jalankan seluruh automated tests
 dotnet test tests\Nexus.Tests\Nexus.Tests.csproj -p:Platform=x64
 
-# Jalankan aplikasi UI
-Start-Process "src\Nexus.UI\bin\x64\Debug\net10.0-windows10.0.26100.0\Nexus.UI.exe"
-```
+# Publish versi Release mandiri (win-x64)
+dotnet publish src\Nexus.UI\Nexus.UI.csproj -c Release -r win-x64 --self-contained true -p:Platform=x64 -o release\publish-win-x64
 
-### Build Installer & Paket Release
-```powershell
-powershell -ExecutionPolicy Bypass -File .\installer\build-release.ps1 -Version "1.0.0"
+# Jalankan aplikasi UI
+Start-Process "release\publish-win-x64\Nexus.UI.exe"
 ```
-Output akan dibuat di folder `release/`:
-- `NEXUS-v1.0.0-win-x64-portable.zip`
-- `NEXUS-Setup-v1.0.0-win-x64.exe` *(jika Inno Setup 6 terpasang, atau otomatis dibuat oleh GitHub Actions saat push tag `v1.0.0`)*
 
 ---
 
